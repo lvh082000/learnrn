@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Images from './assets/images';
 import {getWidth, moderateScale} from './config';
+import user from './userData.json';
 
 const styles = StyleSheet.create({
   textHeader: {
