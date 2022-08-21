@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Image,
   StyleSheet,
@@ -10,6 +10,8 @@ import {
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
 import user from '../../userData.json';
+import {navigate} from '../../navigation/root-navigation';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   textHeader: {
@@ -224,12 +226,31 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function App() {
+export default function LoginScreen() {
+  const navigation = useNavigation();
+  const router = useRoute();
   const [text, setText] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+  useEffect(() => {
+    console.log('AAA: ', router?.params?.backLogin);
+  }, [router?.params?.backLogin]);
+
   const handleSubmit = () => {
-    alert(`${text} --- ${password}`);
+    if (!text || !password) {
+      return alert('vui ong nhap data');
+    }
+    if (text !== user.email) {
+      return alert('User name sai');
+    }
+
+    if (password !== user.password) {
+      return alert('password sai');
+    }
+
+    navigation.navigate('Home', {
+      user1: user,
+    });
   };
 
   return (
@@ -257,7 +278,7 @@ export default function App() {
 
         {/* dang nhap */}
         <TouchableOpacity
-          onPress={() => handleSubmit(text, password)}
+          onPress={handleSubmit}
           style={styles.touchableOpacity}>
           <Text style={styles.dangnhap}>Dang nhap</Text>
         </TouchableOpacity>
