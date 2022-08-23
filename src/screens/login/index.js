@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
+import {login} from '../../api/auth-api';
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -230,11 +232,17 @@ export default function LoginScreen() {
   const [text, setText] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  useEffect(() => {
-    console.log('AAA: ', router?.params?.backLogin);
-  }, [router?.params?.backLogin]);
+  // useEffect(() => {
+  //   console.log('AAA: ', router?.params?.backLogin);
+  // }, [router?.params?.backLogin]);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    const res = await login({
+      email: text,
+      password: password,
+    });
+    console.log({res});
+  };
 
   return (
     <View style={styles.container}>
