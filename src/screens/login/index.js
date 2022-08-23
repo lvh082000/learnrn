@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
-import user from '../../userData.json';
-import {navigate} from '../../navigation/root-navigation';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 const styles = StyleSheet.create({
@@ -236,22 +234,7 @@ export default function LoginScreen() {
     console.log('AAA: ', router?.params?.backLogin);
   }, [router?.params?.backLogin]);
 
-  const handleSubmit = () => {
-    if (!text || !password) {
-      return alert('vui ong nhap data');
-    }
-    if (text !== user.email) {
-      return alert('User name sai');
-    }
-
-    if (password !== user.password) {
-      return alert('password sai');
-    }
-
-    navigation.navigate('Home', {
-      user1: user,
-    });
-  };
+  const handleSubmit = async () => {};
 
   return (
     <View style={styles.container}>
