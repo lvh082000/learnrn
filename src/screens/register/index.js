@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import {login} from '../../api/auth-api';
+import {register} from '../../api/auth-api';
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -75,6 +75,19 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(8),
     paddingVertical: moderateScale(12),
     paddingHorizontal: moderateScale(14),
+    color: '#4F4F4F',
+    marginHorizontal: moderateScale(18),
+    height: moderateScale(48),
+  },
+  input2: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D3DEE8',
+    fontSize: moderateScale(16),
+    borderRadius: moderateScale(8),
+    paddingVertical: moderateScale(12),
+    paddingHorizontal: moderateScale(14),
+    marginTop: moderateScale(12),
     color: '#4F4F4F',
     marginHorizontal: moderateScale(18),
     height: moderateScale(48),
@@ -226,22 +239,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
   const navigation = useNavigation();
   const router = useRoute();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-
-  // useEffect(() => {
-  //   console.log('AAA: ', router?.params?.backLogin);
-  // }, [router?.params?.backLogin]);
+  const [name, setName] = React.useState('');
 
   const handleSubmit = async () => {
-    const res = await login({
+    const resg = await register({
       email: email,
       password: password,
+      name: name,
     });
-    console.log({res});
+    console.log({resg});
   };
 
   return (
@@ -265,39 +276,23 @@ export default function LoginScreen() {
             setPassword(val);
           }}
           placeholder="Mat khau"
+          value={password}
+        />
+
+        <TextInput
+          style={styles.input2}
+          onChangeText={val => {
+            setName(val);
+          }}
+          placeholder="Ten nguoi dung"
+          value={name}
         />
 
         {/* dang nhap */}
         <TouchableOpacity
           onPress={handleSubmit}
           style={styles.touchableOpacity}>
-          <Text style={styles.dangnhap}>Dang nhap</Text>
-        </TouchableOpacity>
-
-        {/* chua co taikhoan _FIX */}
-        <View style={styles.viewTextForgetPassword}>
-          <Text style={styles.textFogetPassword}>Forgot Password</Text>
-          <Text style={styles.taikhoan}>
-            {`Chua co tai khoan? `}
-            <Text style={styles.dangky}>Dang ky</Text>
-          </Text>
-        </View>
-
-        {/* login with */}
-        <TouchableOpacity style={styles.touchLogin}>
-          <Text style={styles.textLogin}>login with </Text>
-        </TouchableOpacity>
-
-        {/* facebook */}
-        <TouchableOpacity style={styles.touchableOpacity1}>
-          <Image style={styles.fb} source={Images.fb} />
-          <Text style={styles.textButton1}>login with Facebook</Text>
-        </TouchableOpacity>
-
-        {/* google */}
-        <TouchableOpacity style={styles.touchableOpacity2}>
-          <Image style={styles.google} source={Images.google} />
-          <Text style={styles.textButton2}>Login with Google</Text>
+          <Text style={styles.dangnhap}>Register</Text>
         </TouchableOpacity>
       </View>
     </View>
