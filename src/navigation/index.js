@@ -5,17 +5,21 @@ import Home from '../screens/home';
 import Login from '../screens/login';
 import Account from '../screens/account';
 import Register from '../screens/register';
+import ForgetPassword from '../screens/forgetPassword';
+import ResetPassword from '../screens/resetPassword';
 
 const RootStack = createNativeStackNavigator();
 
 const AppNavigation = () => {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="Register">
+      <RootStack.Navigator initialRouteName="ForgetPassword">
         <RootStack.Screen name="Login" component={Login} />
         <RootStack.Screen name="Home" component={Home} />
         <RootStack.Screen name="Account" component={Account} />
         <RootStack.Screen name="Register" component={Register} />
+        <RootStack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <RootStack.Screen name="ResetPassword" component={ResetPassword} />
       </RootStack.Navigator>
     </NavigationContainer>
   );
