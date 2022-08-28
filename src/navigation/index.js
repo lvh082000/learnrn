@@ -10,15 +10,34 @@ import ResetPassword from '../screens/resetPassword';
 
 const RootStack = createNativeStackNavigator();
 
+export const RoutesName = {
+  Login: 'Login',
+  Home1: 'Home',
+  ForgetPassword: 'ForgetPassword',
+  Register: 'Register',
+};
+
 const AppNavigation = () => {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="ForgetPassword">
-        <RootStack.Screen name="Login" component={Login} />
-        <RootStack.Screen name="Home" component={Home} />
+      <RootStack.Navigator initialRouteName="Login">
+        <RootStack.Screen
+          key={RoutesName.Login}
+          name={RoutesName.Login}
+          component={Login}
+        />
+        <RootStack.Screen
+          // key={RoutesName.Home1}
+          name={RoutesName.Home1}
+          component={Home}
+        />
         <RootStack.Screen name="Account" component={Account} />
-        <RootStack.Screen name="Register" component={Register} />
-        <RootStack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <RootStack.Screen name={RoutesName.Register} component={Register} />
+        <RootStack.Screen
+          // key={RoutesName.ForgetPassword}
+          name={RoutesName.ForgetPassword}
+          component={ForgetPassword}
+        />
         <RootStack.Screen name="ResetPassword" component={ResetPassword} />
       </RootStack.Navigator>
     </NavigationContainer>

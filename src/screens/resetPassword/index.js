@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 
-import {register} from '../../api/auth-api';
+import {resetPassword} from '../../api/auth-api';
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
 import {useNavigation, useRoute} from '@react-navigation/native';

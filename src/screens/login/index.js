@@ -12,6 +12,7 @@ import {login} from '../../api/auth-api';
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {RoutesName} from '../../navigation';
 
 const styles = StyleSheet.create({
   textHeader: {
@@ -276,10 +277,22 @@ export default function LoginScreen() {
 
         {/* chua co taikhoan _FIX */}
         <View style={styles.viewTextForgetPassword}>
-          <Text style={styles.textFogetPassword}>Forgot Password</Text>
+          <TouchableOpacity
+            style={styles.Touch}
+            onPress={() => {
+              navigation.navigate(RoutesName.ForgetPassword);
+            }}>
+            <Text style={styles.textFogetPassword}>Forgot Password</Text>
+          </TouchableOpacity>
+
           <Text style={styles.taikhoan}>
             {`Chua co tai khoan? `}
-            <Text style={styles.dangky}>Dang ky</Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate(RoutesName.Register);
+              }}>
+              <Text style={styles.dangky}>Dang ky</Text>
+            </TouchableOpacity>
           </Text>
         </View>
 
