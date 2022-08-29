@@ -15,14 +15,14 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRoute();
 
-  const {user1} = router.params;
-  const {email, password} = user1;
+  // const {user1} = router.params;
+  // const {email, password} = user1;
 
-  const navigateAccount = () => {
-    navigation.navigate('Account', {
-      emailAddress: email,
-    });
-  };
+  // const navigateAccount = () => {
+  //   navigation.navigate('Account', {
+  //     emailAddress: email,
+  //   });
+  // };
 
   const navigateLogin = () => {
     navigation.navigate('Login', {
@@ -32,11 +32,11 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text>Home screen</Text>
-      <Text>User: {email}</Text>
-      <Text>Password: {password}</Text>
-      <Button title="go back to login" onPress={navigateLogin} />
-      <Button title="go to account" onPress={navigateAccount} />
+      {/* <Text>Home screen</Text> */}
+      {/* <Text>User: {email}</Text> */}
+      {/* <Text>Password: {password}</Text> */}
+      {/* <Button title="go back to login" onPress={navigateLogin} /> */}
+      {/* <Button title="go to account" onPress={navigateAccount} /> */}
     </View>
   );
 }

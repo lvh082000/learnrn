@@ -243,8 +243,10 @@ export default function LoginScreen() {
       password: password,
     });
     console.log({res});
+    if (res.status === 200) {
+      navigation.navigate(RoutesName.Home1);
+    }
   };
-
   return (
     <View style={styles.container}>
       <Image style={styles.tinyLogo} source={Images.logo} />
