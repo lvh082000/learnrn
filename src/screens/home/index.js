@@ -6,11 +6,12 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {navigate} from '../../navigation/root-navigation';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getWidth, moderateScale} from '../../config';
-import {createWork} from '../../api/work-api';
+import {createWork, getWorks} from '../../api/work-api';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,6 +63,24 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#ffffff',
+  },
+  listContainer: {
+    marginTop: moderateScale(20),
+    justifyContent: 'center',
+    // alignItems: 'center',
+    borderRadius: moderateScale(8),
+    borderWidth: 1,
+    marginHorizontal: moderateScale(18),
+    paddingHorizontal: moderateScale(20),
+    paddingVertical: moderateScale(20),
+  },
+  itemTitle: {
+    fontSize: moderateScale(18),
+    fontWeight: 'bold',
+  },
+  itemDescriber: {
+    fontSize: moderateScale(18),
+    // fontWeight: 'bold',
   },
 });
 
@@ -125,6 +144,13 @@ export default function HomeScreen() {
       <TouchableOpacity style={styles.touchableOpacity} onPress={handleSubmit}>
         <Text style={styles.text}>Create</Text>
       </TouchableOpacity>
+
+      <ScrollView>
+        <View style={styles.listContainer}>
+          <Text style={styles.itemTitle}>Hello</Text>
+          <Text style={styles.itemDescriber}>Hi</Text>
+        </View>
+      </ScrollView>
     </View>
   );
 }
