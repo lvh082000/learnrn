@@ -20,7 +20,7 @@ export const RoutesName = {
 const AppNavigation = () => {
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="Login">
+      <RootStack.Navigator initialRouteName="Home">
         <RootStack.Screen
           key={RoutesName.Login}
           name={RoutesName.Login}

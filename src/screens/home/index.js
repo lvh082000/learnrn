@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -90,6 +90,8 @@ export default function HomeScreen() {
   const [title, setTitle] = React.useState('');
   const [describe, setDescride] = React.useState('');
 
+  const [works, setWorks] = useState([]);
+
   // const {user1} = router.params;
   // const {email, password} = user1;
 
@@ -99,11 +101,11 @@ export default function HomeScreen() {
   //   });
   // };
 
-  const navigateLogin = () => {
-    navigation.navigate('Login', {
-      backLogin: 'tro ve man hinh login',
-    });
-  };
+  // const navigateLogin = () => {
+  //   navigation.navigate('Login', {
+  //     backLogin: 'tro ve man hinh login',
+  //   });
+  // };
 
   const handleSubmit = async () => {
     const res = await createWork({
@@ -116,6 +118,16 @@ export default function HomeScreen() {
       alert('success');
     }
   };
+
+  const getData = async () => {
+    const res = await getWorks();
+    setWorks(res.data);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [works]);
+
   return (
     <View style={styles.container}>
       {/* <Text>Home screen</Text> */}
@@ -146,10 +158,12 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <ScrollView>
-        <View style={styles.listContainer}>
-          <Text style={styles.itemTitle}>Hello</Text>
-          <Text style={styles.itemDescriber}>Hi</Text>
-        </View>
+        {works.map((work, index) => (
+          <View style={styles.listContainer} key={index}>
+            <Text style={styles.itemTitle}>{work.title}</Text>
+            <Text style={styles.itemDescriber}>{work.describe}</Text>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
