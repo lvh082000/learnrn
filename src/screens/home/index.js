@@ -11,7 +11,7 @@ import {
 import {navigate} from '../../navigation/root-navigation';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getWidth, moderateScale} from '../../config';
-import {createWork, getWorks} from '../../api/work-api';
+import {getWorks, createWork, deleteWork} from '../../api/work-api';
 
 const styles = StyleSheet.create({
   container: {
@@ -65,8 +65,10 @@ const styles = StyleSheet.create({
     color: '#ffffff',
   },
   listContainer: {
+    flexDirection: 'row',
+
     marginTop: moderateScale(20),
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     // alignItems: 'center',
     borderRadius: moderateScale(8),
     borderWidth: 1,
@@ -82,14 +84,26 @@ const styles = StyleSheet.create({
     fontSize: moderateScale(18),
     // fontWeight: 'bold',
   },
+  delete: {
+    borderWidth: 1,
+    borderRadius: moderateScale(8),
+  },
+  update: {
+    borderWidth: 1,
+    borderRadius: moderateScale(8),
+    marginTop: moderateScale(5),
+  },
 });
 
 export default function HomeScreen() {
   const navigation = useNavigation();
   const router = useRoute();
+
+  // data cua api can
   const [title, setTitle] = React.useState('');
   const [describe, setDescride] = React.useState('');
 
+  // bien de luu lai danh sach minh lam
   const [works, setWorks] = useState([]);
 
   // const {user1} = router.params;
@@ -109,24 +123,31 @@ export default function HomeScreen() {
 
   const handleSubmit = async () => {
     const res = await createWork({
-      title: title,
+      title: title, //param truyen vao
       describe: describe,
     });
-
-    console.log({res});
+    console.log(res);
     if (res.status === 200) {
       alert('success');
     }
   };
 
   const getData = async () => {
-    const res = await getWorks();
-    setWorks(res.data);
+    const file = await getWorks();
+    setWorks(file.data);
+    // console.log(file);
   };
 
   useEffect(() => {
     getData();
   }, [works]);
+
+  // params : truyen prop qua function (co the de ten gi cung duoc)
+  // params duoc truyen trong () la khai bao bien
+  const handledeleteWork = async params => {
+    const res = await deleteWork({title: params});
+    console.log(res);
+  };
 
   return (
     <View style={styles.container}>
@@ -153,6 +174,7 @@ export default function HomeScreen() {
         placeholder="Describe"
         value={describe}
       />
+
       <TouchableOpacity style={styles.touchableOpacity} onPress={handleSubmit}>
         <Text style={styles.text}>Create</Text>
       </TouchableOpacity>
@@ -160,8 +182,19 @@ export default function HomeScreen() {
       <ScrollView>
         {works.map((work, index) => (
           <View style={styles.listContainer} key={index}>
-            <Text style={styles.itemTitle}>{work.title}</Text>
-            <Text style={styles.itemDescriber}>{work.describe}</Text>
+            <View>
+              <Text style={styles.itemTitle}>{work.title}</Text>
+              {/* work :element -> call data co trong element */}
+              <Text style={styles.itemDescriber}>{work.describe}</Text>
+            </View>
+            <View>
+              <TouchableOpacity onPress={() => handledeleteWork(work.title)}>
+                <Text style={styles.delete}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={styles.update}>Update</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         ))}
       </ScrollView>

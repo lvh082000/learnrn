@@ -7,3 +7,11 @@ export const createWork = async payload => {
 export const getWorks = async () => {
   return await axiosClient.get('/work/list');
 };
+
+export const deleteWork = async payload => {
+  return await axiosClient.delete('/work/delete', payload);
+};
+
+export const updateWorks = async payload => {
+  return await axiosClient.patch('/work/update', payload);
+};
