@@ -11,7 +11,7 @@ import {
 import {navigate} from '../../navigation/root-navigation';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getWidth, moderateScale} from '../../config';
-import {getWorks, createWork, deleteWork} from '../../api/work-api';
+import {getWorks, createWork, deleteWork, updateWork} from '../../api/work-api';
 
 const styles = StyleSheet.create({
   container: {
@@ -144,9 +144,12 @@ export default function HomeScreen() {
 
   // params : truyen prop qua function (co the de ten gi cung duoc)
   // params duoc truyen trong () la khai bao bien
-  const handledeleteWork = async params => {
+  const handleDeleteWork = async params => {
     const res = await deleteWork({title: params});
-    console.log(res);
+  };
+
+  const handleUpdateWork = async params => {
+    const res = await updateWork({title: params});
   };
 
   return (
@@ -188,10 +191,10 @@ export default function HomeScreen() {
               <Text style={styles.itemDescriber}>{work.describe}</Text>
             </View>
             <View>
-              <TouchableOpacity onPress={() => handledeleteWork(work.title)}>
+              <TouchableOpacity onPress={() => handleDeleteWork(work.title)}>
                 <Text style={styles.delete}>Delete</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handleUpdateWork(work.title)}>
                 <Text style={styles.update}>Update</Text>
               </TouchableOpacity>
             </View>
