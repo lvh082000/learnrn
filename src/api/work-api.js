@@ -12,6 +12,6 @@ export const deleteWork = async payload => {
   return await axiosClient.delete('/work/delete', payload);
 };
 
-export const updateWorks = async payload => {
+export const updateWork = async payload => {
   return await axiosClient.patch('/work/update', payload);
 };

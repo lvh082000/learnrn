@@ -102,6 +102,7 @@ export default function HomeScreen() {
   // data cua api can
   const [title, setTitle] = React.useState('');
   const [describe, setDescride] = React.useState('');
+  const [isEdit, setIsEdit] = useState('');
 
   // bien de luu lai danh sach minh lam
   const [works, setWorks] = useState([]);
@@ -122,13 +123,28 @@ export default function HomeScreen() {
   // };
 
   const handleSubmit = async () => {
-    const res = await createWork({
-      title: title, //param truyen vao
-      describe: describe,
-    });
-    console.log(res);
-    if (res.status === 200) {
-      alert('success');
+    if (isEdit) {
+      const res = await updateWork({
+        title: title, //param truyen vao
+        describe: describe,
+      });
+
+      if (res.status === 200) {
+        alert('update success');
+        setIsEdit(false);
+        setTitle('');
+        setDescride('');
+      }
+    } else {
+      const res = await createWork({
+        title: title, //param truyen vao
+        describe: describe,
+      });
+      if (res.status === 200) {
+        alert('create success');
+        setTitle('');
+        setDescride('');
+      }
     }
   };
 
@@ -145,11 +161,13 @@ export default function HomeScreen() {
   // params : truyen prop qua function (co the de ten gi cung duoc)
   // params duoc truyen trong () la khai bao bien
   const handleDeleteWork = async params => {
-    const res = await deleteWork({title: params});
+    await deleteWork({title: params});
   };
 
-  const handleUpdateWork = async params => {
-    const res = await updateWork({title: params});
+  const handleUpdateWork = item => {
+    setIsEdit(true);
+    setTitle(item.title);
+    setDescride(item.describe);
   };
 
   return (
@@ -160,6 +178,7 @@ export default function HomeScreen() {
       {/* <Button title="go back to login" onPress={navigateLogin} /> */}
       {/* <Button title="go to account" onPress={navigateAccount} /> */}
 
+      {/* input title */}
       <TextInput
         style={styles.input}
         onChangeText={value => {
@@ -169,6 +188,7 @@ export default function HomeScreen() {
         value={title}
       />
 
+      {/* input describe */}
       <TextInput
         style={styles.input1}
         onChangeText={value => {
@@ -179,7 +199,7 @@ export default function HomeScreen() {
       />
 
       <TouchableOpacity style={styles.touchableOpacity} onPress={handleSubmit}>
-        <Text style={styles.text}>Create</Text>
+        <Text style={styles.text}>{isEdit ? 'Update' : 'Create'}</Text>
       </TouchableOpacity>
 
       <ScrollView>
@@ -194,7 +214,7 @@ export default function HomeScreen() {
               <TouchableOpacity onPress={() => handleDeleteWork(work.title)}>
                 <Text style={styles.delete}>Delete</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleUpdateWork(work.title)}>
+              <TouchableOpacity onPress={() => handleUpdateWork(work)}>
                 <Text style={styles.update}>Update</Text>
               </TouchableOpacity>
             </View>
