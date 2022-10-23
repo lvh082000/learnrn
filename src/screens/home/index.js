@@ -12,6 +12,7 @@ import {navigate} from '../../navigation/root-navigation';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {getWidth, moderateScale} from '../../config';
 import {getWorks, createWork, deleteWork, updateWork} from '../../api/work-api';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const styles = StyleSheet.create({
   container: {
@@ -212,7 +213,7 @@ export default function HomeScreen() {
             </View>
             <View>
               <TouchableOpacity onPress={() => handleDeleteWork(work.title)}>
-                <Text style={styles.delete}>Delete</Text>
+                <AntDesign name="delete" style={{color: 'red', fontSize: 24}} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleUpdateWork(work)}>
                 <Text style={styles.update}>Update</Text>
