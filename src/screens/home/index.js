@@ -13,6 +13,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {getWidth, moderateScale} from '../../config';
 import {getWorks, createWork, deleteWork, updateWork} from '../../api/work-api';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const styles = StyleSheet.create({
   container: {
@@ -101,6 +102,7 @@ export default function HomeScreen() {
   const router = useRoute();
 
   // data cua api can
+  const [idWord, setIdWork] = useState('');
   const [title, setTitle] = React.useState('');
   const [describe, setDescride] = React.useState('');
   const [isEdit, setIsEdit] = useState('');
@@ -126,6 +128,7 @@ export default function HomeScreen() {
   const handleSubmit = async () => {
     if (isEdit) {
       const res = await updateWork({
+        id: idWord,
         title: title, //param truyen vao
         describe: describe,
       });
@@ -169,6 +172,7 @@ export default function HomeScreen() {
     setIsEdit(true);
     setTitle(item.title);
     setDescride(item.describe);
+    setIdWork(item._id);
   };
 
   return (
@@ -213,10 +217,10 @@ export default function HomeScreen() {
             </View>
             <View>
               <TouchableOpacity onPress={() => handleDeleteWork(work.title)}>
-                <AntDesign name="delete" style={{color: 'red', fontSize: 24}} />
+                <AntDesign name="edit" style={{color: 'red', fontSize: 24}} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleUpdateWork(work)}>
-                <Text style={styles.update}>Update</Text>
+                <Entypo name="edit" style={{color: 'red', fontSize: 24}} />
               </TouchableOpacity>
             </View>
           </View>
