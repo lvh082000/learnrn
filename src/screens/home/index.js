@@ -1,19 +1,20 @@
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  ScrollView,
   StyleSheet,
-  View,
   Text,
-  Button,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from 'react-native';
-import {navigate} from '../../navigation/root-navigation';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {getWidth, moderateScale} from '../../config';
-import {getWorks, createWork, deleteWork, updateWork} from '../../api/work-api';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useDispatch} from 'react-redux';
+import {createWork, deleteWork, getWorks, updateWork} from '../../api/work-api';
+import {moderateScale} from '../../config';
+import {changeState} from '../../store/authSlice';
+import {useShallowEqualSelector} from '../../store/selector';
 
 const styles = StyleSheet.create({
   container: {
@@ -98,6 +99,14 @@ const styles = StyleSheet.create({
 });
 
 export default function HomeScreen() {
+  const {state_redux, isLogin} = useShallowEqualSelector(state => ({
+    state_redux: state.me.state_redux,
+    isLogin: state.me.isLogin,
+  }));
+  const dispatch = useDispatch();
+
+  console.log({state_redux, isLogin});
+
   const navigation = useNavigation();
   const router = useRoute();
 
@@ -160,7 +169,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getData();
-  }, [works]);
+  }, []);
 
   // params : truyen prop qua function (co the de ten gi cung duoc)
   // params duoc truyen trong () la khai bao bien
@@ -173,6 +182,10 @@ export default function HomeScreen() {
     setTitle(item.title);
     setDescride(item.describe);
     setIdWork(item._id);
+  };
+
+  const onChangeStateStore = () => {
+    dispatch(changeState('sleep'));
   };
 
   return (
@@ -205,6 +218,14 @@ export default function HomeScreen() {
 
       <TouchableOpacity style={styles.touchableOpacity} onPress={handleSubmit}>
         <Text style={styles.text}>{isEdit ? 'Update' : 'Create'}</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.itemDescriber}>{state_redux}</Text>
+
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={onChangeStateStore}>
+        <Text style={styles.text}>Dispatch</Text>
       </TouchableOpacity>
 
       <ScrollView>
