@@ -246,7 +246,10 @@ export default function LoginScreen() {
     const actionResults = await dispatch(
       loginAsyncThunk({email: email, password: password}),
     );
+    console.log({actionResults});
+
     const unwrapResultData = unwrapResult(actionResults);
+    console.log({unwrapResultData});
     if (unwrapResultData.status === 200) {
       navigation.dispatch(
         CommonActions.reset({
