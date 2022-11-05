@@ -1,19 +1,20 @@
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  ScrollView,
   StyleSheet,
-  View,
   Text,
-  Button,
   TextInput,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from 'react-native';
-import {navigate} from '../../navigation/root-navigation';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {getWidth, moderateScale} from '../../config';
-import {getWorks, createWork, deleteWork, updateWork} from '../../api/work-api';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useDispatch} from 'react-redux';
+import {createWork, deleteWork, getWorks, updateWork} from '../../api/work-api';
+import {moderateScale} from '../../config';
+import {changeState, changeLogin, changeColor} from '../../store/authSlice';
+import {useShallowEqualSelector} from '../../store/selector';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,6 +64,17 @@ const styles = StyleSheet.create({
     marginHorizontal: moderateScale(18),
     marginTop: moderateScale(24),
   },
+  changeColor1: {
+    backgroundColor: '#FF7133',
+
+    borderRadius: moderateScale(8),
+    paddingVertical: moderateScale(8),
+    alignItems: 'center',
+    height: moderateScale(48),
+    justifyContent: 'center',
+    marginHorizontal: moderateScale(18),
+    marginTop: moderateScale(24),
+  },
   text: {
     color: '#ffffff',
   },
@@ -95,9 +107,32 @@ const styles = StyleSheet.create({
     borderRadius: moderateScale(8),
     marginTop: moderateScale(5),
   },
+  // changeColor:{
+  //   backgroundColor: stateColor,
+  //   height: 50,
+  //   width: 350,
+  //   marginTop: 20,
+  //   left: 20,
+  //   borderRadius: 8,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // }
 });
 
 export default function HomeScreen() {
+  const {state_redux, isLogin, stateColor} = useShallowEqualSelector(state => ({
+    // useShallowEqualSelector la Hook dung de lay gia tri
+    // use cua hook cua redux
+    state_redux: state.me.state_redux,
+    isLogin: state.me.isLogin,
+    stateColor: state.me.stateColor,
+  }));
+
+  const dispatch = useDispatch();
+
+  console.log({stateColor});
+  console.log({state_redux, isLogin});
+
   const navigation = useNavigation();
   const router = useRoute();
 
@@ -160,7 +195,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     getData();
-  }, [works]);
+  }, []);
 
   // params : truyen prop qua function (co the de ten gi cung duoc)
   // params duoc truyen trong () la khai bao bien
@@ -175,6 +210,20 @@ export default function HomeScreen() {
     setIdWork(item._id);
   };
 
+  const onChangeStateStore = () => {
+    // dispact 1 su kien , truyen gia tri = hello vao changeState
+
+    dispatch(changeState('hello')); // dispatch la ham dung de thay doi state
+    // ham changeState cua reducer
+  };
+
+  const onChangeLogin = () => {
+    dispatch(changeLogin(!isLogin));
+  };
+
+  const onChangeColor = () => {
+    dispatch(changeColor(!stateColor));
+  };
   return (
     <View style={styles.container}>
       {/* <Text>Home screen</Text> */}
@@ -205,6 +254,40 @@ export default function HomeScreen() {
 
       <TouchableOpacity style={styles.touchableOpacity} onPress={handleSubmit}>
         <Text style={styles.text}>{isEdit ? 'Update' : 'Create'}</Text>
+      </TouchableOpacity>
+
+      {/* this one renter a value for dispatch */}
+      <Text style={styles.itemDescriber}>{state_redux}</Text>
+
+      <TouchableOpacity
+        style={styles.touchableOpacity}
+        onPress={onChangeStateStore}>
+        <Text style={styles.text}>Dispatch</Text>
+      </TouchableOpacity>
+
+      {/*  */}
+      <Text style={styles.itemDescriber}>{isLogin ? 'Login' : 'notLogin'}</Text>
+
+      <TouchableOpacity style={styles.touchableOpacity} onPress={onChangeLogin}>
+        <Text style={styles.text}>Dispatch_Login</Text>
+      </TouchableOpacity>
+
+      <View
+        style={{
+          backgroundColor: stateColor ? 'red' : 'blue',
+          height: 50,
+          width: 350,
+          marginTop: 20,
+          left: 20,
+          borderRadius: 8,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text> {}</Text>
+      </View>
+
+      <TouchableOpacity style={styles.changeColor1} onPress={onChangeColor}>
+        <Text style={{}}>Press here to change color</Text>
       </TouchableOpacity>
 
       <ScrollView>
