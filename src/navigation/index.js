@@ -7,6 +7,7 @@ import Account from '../screens/account';
 import Register from '../screens/register';
 import ForgetPassword from '../screens/forgetPassword';
 import ResetPassword from '../screens/resetPassword';
+import {useShallowEqualSelector} from '../store/selector';
 
 const RootStack = createNativeStackNavigator();
 
@@ -18,9 +19,12 @@ export const RoutesName = {
 };
 
 const AppNavigation = () => {
+  const {userId} = useShallowEqualSelector(state => ({
+    userId: state.me.userId,
+  }));
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName="Home">
+      <RootStack.Navigator initialRouteName={userId ? 'Home' : 'Login'}>
         <RootStack.Screen
           key={RoutesName.Login}
           name={RoutesName.Login}

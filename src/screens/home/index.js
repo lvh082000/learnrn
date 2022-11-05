@@ -1,4 +1,4 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, CommonActions} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
@@ -13,7 +13,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {useDispatch} from 'react-redux';
 import {createWork, deleteWork, getWorks, updateWork} from '../../api/work-api';
 import {moderateScale} from '../../config';
-import {changeState} from '../../store/authSlice';
+import {changeState, resetAuth} from '../../store/authSlice';
 import {useShallowEqualSelector} from '../../store/selector';
 
 const styles = StyleSheet.create({
@@ -99,13 +99,10 @@ const styles = StyleSheet.create({
 });
 
 export default function HomeScreen() {
-  const {state_redux, isLogin} = useShallowEqualSelector(state => ({
+  const {state_redux} = useShallowEqualSelector(state => ({
     state_redux: state.me.state_redux,
-    isLogin: state.me.isLogin,
   }));
   const dispatch = useDispatch();
-
-  console.log({state_redux, isLogin});
 
   const navigation = useNavigation();
   const router = useRoute();
@@ -188,6 +185,16 @@ export default function HomeScreen() {
     dispatch(changeState('sleep'));
   };
 
+  const handleLogout = () => {
+    dispatch(resetAuth());
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Login'}],
+      }),
+    );
+  };
+
   return (
     <View style={styles.container}>
       {/* <Text>Home screen</Text> */}
@@ -195,6 +202,10 @@ export default function HomeScreen() {
       {/* <Text>Password: {password}</Text> */}
       {/* <Button title="go back to login" onPress={navigateLogin} /> */}
       {/* <Button title="go to account" onPress={navigateAccount} /> */}
+
+      <TouchableOpacity style={styles.touchableOpacity} onPress={handleLogout}>
+        <Text style={styles.text}>Logout</Text>
+      </TouchableOpacity>
 
       {/* input title */}
       <TextInput

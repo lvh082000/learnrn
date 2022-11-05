@@ -247,12 +247,12 @@ export default function RegisterScreen() {
   const [name, setName] = React.useState('');
 
   const handleSubmit = async () => {
-    const resg = await register({
+    const res = await register({
       email: email,
       password: password,
       name: name,
     });
-    console.log({resg});
+    console.log({res});
   };
 
   return (
@@ -265,8 +265,9 @@ export default function RegisterScreen() {
           onChangeText={value => {
             setEmail(value);
           }}
-          placeholder="Tai khoan"
+          placeholder="Email"
           value={email}
+          autoCapitalize={false}
         />
 
         {/* password */}
@@ -277,6 +278,7 @@ export default function RegisterScreen() {
           }}
           placeholder="Mat khau"
           value={password}
+          autoCapitalize={false}
         />
 
         <TextInput
@@ -286,6 +288,7 @@ export default function RegisterScreen() {
           }}
           placeholder="Ten nguoi dung"
           value={name}
+          autoCapitalize={false}
         />
 
         {/* dang nhap */}
