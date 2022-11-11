@@ -7,11 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {unwrapResult} from '@reduxjs/toolkit';
+import {loginAsyncThunk} from '../../store/authSlice';
+import {useShallowEqualSelector} from '../../store/selector';
+import {useDispatch} from 'react-redux';
 
 import {login} from '../../api/auth-api';
 import Images from '../../assets/images';
 import {getWidth, moderateScale} from '../../config';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute, CommonActions} from '@react-navigation/native';
 import {RoutesName} from '../../navigation';
 
 const styles = StyleSheet.create({
@@ -233,20 +237,35 @@ export default function LoginScreen() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+  // redux co  : 2 su kien song song: dispatch , selector:useShallowEqualSelector
+  const {userId} = useShallowEqualSelector(state => ({
+    userId: state.me.userId,
+  }));
+  const dispatch = useDispatch();
   // useEffect(() => {
   //   console.log('AAA: ', router?.params?.backLogin);
   // }, [router?.params?.backLogin]);
 
   const handleSubmit = async () => {
-    const res = await login({
-      email: email,
-      password: password,
-    });
-    console.log({res});
-    if (res.status === 200) {
-      navigation.navigate(RoutesName.Home1);
+    const actionResults = await dispatch(
+      loginAsyncThunk({email: email, password: password}),
+    );
+    // console.log(actionResults);
+
+    // dung de fotmat lai cai data cho minh
+    const unwrapResultData = unwrapResult(actionResults);
+    // console.log(unwrapResultData);
+    if (unwrapResultData.status === 200) {
+      // neu login 200 thi reset lai man hinh home
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1, // vi tri cua man hinh = home = 1 la vi tri dau tien
+          routes: [{name: 'Home'}],
+        }),
+      );
     }
   };
+
   return (
     <View style={styles.container}>
       <Image style={styles.tinyLogo} source={Images.logo} />
@@ -259,6 +278,7 @@ export default function LoginScreen() {
           }}
           placeholder="Tai khoan"
           value={email}
+          autoCapitalize={false}
         />
 
         {/* password */}
@@ -268,6 +288,7 @@ export default function LoginScreen() {
             setPassword(val);
           }}
           placeholder="Mat khau"
+          autoCapitalize={false}
         />
 
         {/* dang nhap */}
