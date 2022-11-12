@@ -5,6 +5,7 @@ import Home from '../screens/home';
 import Login from '../screens/login';
 import Account from '../screens/account';
 import Register from '../screens/register';
+import Work from '../screens/work';
 import ForgetPassword from '../screens/forgetPassword';
 import ResetPassword from '../screens/resetPassword';
 import {useShallowEqualSelector} from '../store/selector';
@@ -16,6 +17,7 @@ export const RoutesName = {
   Home1: 'Home',
   ForgetPassword: 'ForgetPassword',
   Register: 'Register',
+  Work: 'Work',
 };
 
 const AppNavigation = () => {
@@ -24,7 +26,9 @@ const AppNavigation = () => {
   }));
   return (
     <NavigationContainer>
-      <RootStack.Navigator initialRouteName={userId ? 'Home' : 'Login'}>
+      <RootStack.Navigator
+        initialRouteName={userId ? 'Home' : 'Login'}
+        screenOptions={{headerShown: false}}>
         <RootStack.Screen
           key={RoutesName.Login}
           name={RoutesName.Login}
@@ -34,6 +38,11 @@ const AppNavigation = () => {
           // key={RoutesName.Home1}
           name={RoutesName.Home1}
           component={Home}
+        />
+        <RootStack.Screen
+          // key={RoutesName.Home1}
+          name={RoutesName.Work}
+          component={Work}
         />
         <RootStack.Screen name="Account" component={Account} />
         <RootStack.Screen name={RoutesName.Register} component={Register} />
