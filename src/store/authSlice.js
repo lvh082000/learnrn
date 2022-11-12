@@ -15,9 +15,9 @@ export const loginAsyncThunk = createAsyncThunk('auth/login', async data => {
   return responseLogin;
 });
 
-const getWorkAsyncThunk = createAsyncThunk('auth/getWork', async data => {
-  const responseWork = await getWorks(data);
-  console.log(responseWork);
+export const getWorkAsyncThunk = createAsyncThunk('auth/getWork', async () => {
+  const responseWork = await getWorks();
+  // console.log(responseWork);
   return responseWork;
 });
 
@@ -46,7 +46,10 @@ const authSlice = createSlice({
 
     //getWorkAsyncThunk reducers
     builder.addCase(getWorkAsyncThunk.pending, (state, action) => {});
-    builder.addCase(getWorkAsyncThunk.fulfilled, (state, action) => {});
+    builder.addCase(getWorkAsyncThunk.fulfilled, (state, action) => {
+      state.works = action.payload?.data;
+      // console.log(action.payload);
+    });
     builder.addCase(getWorkAsyncThunk.rejected, (state, action) => {});
   },
 });

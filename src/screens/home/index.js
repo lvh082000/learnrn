@@ -13,6 +13,7 @@ import {resetAuth} from '../../store/authSlice';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {RoutesName} from '../../navigation';
 import {getWorkAsyncThunk} from '../../store/authSlice';
+import {useShallowEqualSelector} from '../../store/selector';
 
 const styles = StyleSheet.create({
   container: {
@@ -109,12 +110,12 @@ const styles = StyleSheet.create({
 });
 
 export default function HomeScreen() {
+  const {works} = useShallowEqualSelector(state => ({
+    works: state.me.works,
+  }));
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
-
-  // bien de luu lai danh sach minh lam
-  const [works, setWorks] = useState([]);
 
   const handleLogout = () => {
     dispatch(resetAuth());
