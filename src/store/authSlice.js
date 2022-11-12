@@ -1,15 +1,24 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {login as loginApi} from '../api/auth-api';
+import {getWorks} from '../api/work-api';
 
 const initialState = {
   state_redux: 'react-redux',
   userId: null,
+  works: [],
 };
 
 export const loginAsyncThunk = createAsyncThunk('auth/login', async data => {
+  //loginApi : la dat lai ten, neu ko dat lai ten thi goi thang nhu line 20
   const responseLogin = await loginApi(data);
 
   return responseLogin;
+});
+
+const getWorkAsyncThunk = createAsyncThunk('auth/getWork', async data => {
+  const responseWork = await getWorks(data);
+  console.log(responseWork);
+  return responseWork;
 });
 
 const authSlice = createSlice({
@@ -34,6 +43,11 @@ const authSlice = createSlice({
       state.userId = action.payload?.userId;
     });
     builder.addCase(loginAsyncThunk.rejected, (state, action) => {});
+
+    //getWorkAsyncThunk reducers
+    builder.addCase(getWorkAsyncThunk.pending, (state, action) => {});
+    builder.addCase(getWorkAsyncThunk.fulfilled, (state, action) => {});
+    builder.addCase(getWorkAsyncThunk.rejected, (state, action) => {});
   },
 });
 

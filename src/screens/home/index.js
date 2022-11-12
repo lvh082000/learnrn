@@ -1,5 +1,5 @@
 import {CommonActions, useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -12,6 +12,7 @@ import {moderateScale} from '../../config';
 import {resetAuth} from '../../store/authSlice';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {RoutesName} from '../../navigation';
+import {getWorkAsyncThunk} from '../../store/authSlice';
 
 const styles = StyleSheet.create({
   container: {
@@ -125,6 +126,10 @@ export default function HomeScreen() {
     );
   };
 
+  useEffect(() => {
+    dispatch(getWorkAsyncThunk());
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -138,9 +143,9 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* <TouchableOpacity style={styles.touchableOpacity} onPress={handleLogout}>
+      <TouchableOpacity style={styles.touchableOpacity} onPress={handleLogout}>
         <Text style={styles.text}>Logout</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       <ScrollView>
         {works.map((work, index) => (
