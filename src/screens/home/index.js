@@ -1,24 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {CommonActions, useNavigation} from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
-import {styles} from './styles';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Alert,
-} from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {styles} from './styles';
 
-import {resetAuth} from '../../store/authSlice';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
-import {RoutesName} from '../../navigation';
-import {deleteWorkAsyncThunk} from '../../store/authSlice';
-import {getWorkAsyncThunk} from '../../store/authSlice';
-import {useShallowEqualSelector} from '../../store/selector';
 import {unwrapResult} from '@reduxjs/toolkit';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {RoutesName} from '../../navigation';
+import {
+  deleteWorkAsyncThunk,
+  getWorkAsyncThunk,
+  resetAuth,
+} from '../../store/authSlice';
+import {useShallowEqualSelector} from '../../store/selector';
 
 export default function HomeScreen() {
   const {works} = useShallowEqualSelector(state => ({
@@ -42,6 +37,14 @@ export default function HomeScreen() {
     }
   };
 
+  const handleUpdateWork = async work => {
+    // console.log(work);
+
+    navigation.navigate('Work', {
+      workData: work,
+    });
+  };
+
   const handleLogout = () => {
     dispatch(resetAuth());
     navigation.dispatch(
@@ -63,7 +66,7 @@ export default function HomeScreen() {
         <TouchableOpacity
           style={styles.plusButton}
           onPress={() => {
-            navigation.navigate(RoutesName.Work);
+            navigation.navigate(RoutesName.Work, {workData: null});
           }}>
           <AntDesign name="plus" style={{color: 'red', fontSize: 24}} />
         </TouchableOpacity>
@@ -82,7 +85,7 @@ export default function HomeScreen() {
               <Text style={styles.itemDescriber}>{work.describe}</Text>
             </View>
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => handleUpdateWork(work)}>
                 <AntDesign name="edit" style={{color: 'red', fontSize: 24}} />
               </TouchableOpacity>
               <TouchableOpacity onPress={() => handleDeleteWork(work._id)}>

@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {login as loginApi} from '../api/auth-api';
-import {getWorks, createWork, deleteWork} from '../api/work-api';
+import {getWorks, createWork, deleteWork, updateWork} from '../api/work-api';
 
 const initialState = {
   state_redux: 'react-redux',
@@ -34,6 +34,14 @@ export const deleteWorkAsyncThunk = createAsyncThunk(
   async data => {
     const responseDeleteWork = await deleteWork(data);
     return responseDeleteWork;
+  },
+);
+
+export const updateWorkAsyncThunk = createAsyncThunk(
+  'auth/updateWork',
+  async data => {
+    const responseUpdateWork = await updateWork(data);
+    return responseUpdateWork;
   },
 );
 
@@ -71,7 +79,7 @@ const authSlice = createSlice({
     //createWorkAsyncThunk reducers
     builder.addCase(createWorkAsyncThunk.pending, (state, action) => {});
     builder.addCase(createWorkAsyncThunk.fulfilled, (state, action) => {
-      state.works = [...state.works, action.payload.data];
+      state.works = [action.payload.data, ...state.works];
       // console.log(action.payload);
     });
 
@@ -90,6 +98,17 @@ const authSlice = createSlice({
     });
 
     builder.addCase(deleteWorkAsyncThunk.rejected, (state, action) => {});
+
+    //UpdateWorkAsyncThunk reducers
+    builder.addCase(updateWorkAsyncThunk.pending, (state, action) => {});
+    builder.addCase(updateWorkAsyncThunk.fulfilled, (state, action) => {
+      const oldWorks = [...state.works];
+      const filterWorks = oldWorks.filter(
+        item => item._id !== action.payload.data._id,
+      );
+      state.works = [action.payload.data, ...filterWorks];
+    });
+    builder.addCase(updateWorkAsyncThunk.rejected, (state, action) => {});
   },
 });
 
