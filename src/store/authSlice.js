@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {login as loginApi} from '../api/auth-api';
-import {getWorks} from '../api/work-api';
+import {getWorks, createWork} from '../api/work-api';
 
 const initialState = {
   state_redux: 'react-redux',
@@ -20,6 +20,14 @@ export const getWorkAsyncThunk = createAsyncThunk('auth/getWork', async () => {
   // console.log(responseWork);
   return responseWork;
 });
+
+export const createWorkAsyncThunk = createAsyncThunk(
+  'auth/createWork',
+  async data => {
+    const responseCreateWork = await createWork(data);
+    return responseCreateWork;
+  },
+);
 
 const authSlice = createSlice({
   name: 'AUTH_SLICE',
@@ -51,6 +59,15 @@ const authSlice = createSlice({
       // console.log(action.payload);
     });
     builder.addCase(getWorkAsyncThunk.rejected, (state, action) => {});
+
+    //createWorkAsyncThunk reducers
+    builder.addCase(createWorkAsyncThunk.pending, (state, action) => {});
+    builder.addCase(createWorkAsyncThunk.fulfilled, (state, action) => {
+      state.works = [...state.works, action.payload.data];
+      // console.log(action.payload);
+    });
+
+    builder.addCase(createWorkAsyncThunk.rejected, (state, action) => {});
   },
 });
 

@@ -1,5 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import {
   StyleSheet,
   Text,
@@ -7,9 +8,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {unwrapResult} from '@reduxjs/toolkit';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {moderateScale} from '../../config';
 import {RoutesName} from '../../navigation';
+import {createWorkAsyncThunk} from '../../store/authSlice';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -68,9 +71,30 @@ const styles = StyleSheet.create({
 });
 
 const Work = () => {
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
   const [title, setTitle] = React.useState('');
   const [describe, setDescride] = React.useState('');
+
+  const handleSubmit = async () => {
+    const actionResult = await dispatch(
+      createWorkAsyncThunk({
+        title: title,
+        describe: describe,
+      }),
+    );
+    const unwrapResultData = unwrapResult(actionResult);
+
+    if (unwrapResultData.status === 200) {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{name: 'Home'}],
+        }),
+      );
+    }
+  };
 
   return (
     <View>
@@ -104,8 +128,10 @@ const Work = () => {
           value={describe}
         />
 
-        <TouchableOpacity style={styles.touchableOpacity}>
-          <Text style={styles.text}>Create</Text>
+        <TouchableOpacity
+          style={styles.touchableOpacity}
+          onPress={handleSubmit}>
+          <Text style={styles.text}>Create Work</Text>
         </TouchableOpacity>
       </View>
     </View>
