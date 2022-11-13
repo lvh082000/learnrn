@@ -9,7 +9,8 @@ export const getWorks = async () => {
 };
 
 export const deleteWork = async payload => {
-  return await axiosClient.delete('/work/delete', payload);
+  //${payload} truyen bien payload vao chuoi, variable into string
+  return await axiosClient.delete(`/work/delete/${payload}`);
 };
 
 export const updateWork = async payload => {

@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {login as loginApi} from '../api/auth-api';
-import {getWorks, createWork} from '../api/work-api';
+import {getWorks, createWork, deleteWork} from '../api/work-api';
 
 const initialState = {
   state_redux: 'react-redux',
@@ -26,6 +26,14 @@ export const createWorkAsyncThunk = createAsyncThunk(
   async data => {
     const responseCreateWork = await createWork(data);
     return responseCreateWork;
+  },
+);
+
+export const deleteWorkAsyncThunk = createAsyncThunk(
+  'auth/deleteWork',
+  async data => {
+    const responseDeleteWork = await deleteWork(data);
+    return responseDeleteWork;
   },
 );
 
@@ -68,6 +76,20 @@ const authSlice = createSlice({
     });
 
     builder.addCase(createWorkAsyncThunk.rejected, (state, action) => {});
+
+    // deleteWorkAsyncThunk
+
+    builder.addCase(deleteWorkAsyncThunk.pending, (state, action) => {});
+    builder.addCase(deleteWorkAsyncThunk.fulfilled, (state, action) => {
+      const oldWorks = [...state.works];
+      const filterWorks = oldWorks.filter(
+        item => item._id !== action.payload.data,
+      );
+      state.works = filterWorks;
+      // console.log(action.payload);
+    });
+
+    builder.addCase(deleteWorkAsyncThunk.rejected, (state, action) => {});
   },
 });
 
