@@ -1,15 +1,23 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import {useNavigation, CommonActions, useRoute} from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {useDispatch} from 'react-redux';
+// import {styles} from './styles';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
+import {unwrapResult} from '@reduxjs/toolkit';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {moderateScale} from '../../config';
 import {RoutesName} from '../../navigation';
+import {
+  createWorkAsyncThunk,
+  updateWorkAsyncThunk,
+} from '../../store/authSlice';
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -68,9 +76,62 @@ const styles = StyleSheet.create({
 });
 
 const Work = () => {
+  const dispatch = useDispatch();
+
+  const router = useRoute();
+  const {workData} = router?.params;
+
   const navigation = useNavigation();
   const [title, setTitle] = React.useState('');
-  const [describe, setDescride] = React.useState('');
+  const [describe, setDescribe] = React.useState('');
+
+  const handleSubmit = async () => {
+    if (workData) {
+      const actionResult = await dispatch(
+        updateWorkAsyncThunk({
+          id: workData._id,
+          title: title,
+          describe: describe,
+        }),
+      );
+      const unwrapResultData = unwrapResult(actionResult);
+
+      if (unwrapResultData.status === 200) {
+        Alert.alert('Update success!');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'Home'}],
+          }),
+        );
+      }
+    } else {
+      const actionResult = await dispatch(
+        createWorkAsyncThunk({
+          title: title,
+          describe: describe,
+        }),
+      );
+      const unwrapResultData = unwrapResult(actionResult);
+
+      if (unwrapResultData.status === 200) {
+        Alert.alert('Create success!');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'Home'}],
+          }),
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (workData) {
+      setTitle(workData.title);
+      setDescribe(workData.describe);
+    }
+  }, [workData]);
 
   return (
     <View>
@@ -98,14 +159,18 @@ const Work = () => {
         <TextInput
           style={styles.input1}
           onChangeText={value => {
-            setDescride(value);
+            setDescribe(value);
           }}
           placeholder="Describe"
           value={describe}
         />
 
-        <TouchableOpacity style={styles.touchableOpacity}>
-          <Text style={styles.text}>Create</Text>
+        <TouchableOpacity
+          style={styles.touchableOpacity}
+          onPress={handleSubmit}>
+          <Text style={styles.text}>
+            {workData ? 'Update Work' : 'Create Work'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
